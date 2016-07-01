@@ -20,7 +20,7 @@ public class CommandHandler {
     @Getter
     private static List<? extends Command> commands = Arrays.asList(
             new HelpCommand("help", "Lists commands and their descriptions"),
-            new MusicCommand("music", "Plays music, `music list` to list songs, can search by album, artist, and title")
+            new MusicCommand("music", "Plays music, `music list` to list songs, `music songtitle` to play a song, `music skip` to skip, `music clear` to kill it, `music queue` to show queue, `music pause`")
     );
 
     public void parse(IMessage message) {
