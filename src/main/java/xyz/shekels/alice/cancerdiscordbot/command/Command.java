@@ -7,6 +7,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.HTTP429Exception;
 import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RateLimitException;
 
 /**
  * @author alice
@@ -24,5 +25,5 @@ public abstract class Command {
         this.description = description;
     }
 
-    public abstract void execute(IMessage message) throws HTTP429Exception, DiscordException, MissingPermissionsException;
+    public abstract void execute(IMessage message) throws RateLimitException, DiscordException, MissingPermissionsException;
 }

@@ -1,15 +1,12 @@
 package xyz.shekels.alice.cancerdiscordbot.command;
 
 import lombok.Getter;
-import sx.blah.discord.api.IListener;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.HTTP429Exception;
 import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RateLimitException;
 import xyz.shekels.alice.cancerdiscordbot.command.commands.HelpCommand;
-import xyz.shekels.alice.cancerdiscordbot.command.commands.PlayCommand;
-import xyz.shekels.alice.cancerdiscordbot.command.commands.QueueCommand;
-import xyz.shekels.alice.cancerdiscordbot.events.listeners.MessageRecievedListener;
+import xyz.shekels.alice.cancerdiscordbot.command.commands.MusicCommand;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +20,7 @@ public class CommandHandler {
     @Getter
     private static List<? extends Command> commands = Arrays.asList(
             new HelpCommand("help", "Lists commands and their descriptions"),
-            new PlayCommand("play", "Plays music, `$play list` to list songs, can search by album, artist, and title"),
-            new QueueCommand("queue", "`$queue` lists songs in queue, `$queue clear` clears")
+            new MusicCommand("music", "Plays music, `music list` to list songs, can search by album, artist, and title")
     );
 
     public void parse(IMessage message) {
@@ -35,7 +31,7 @@ public class CommandHandler {
                 if (command.getCommand().equals(finalMessage[0])) {
                     try {
                         command.execute(message);
-                    } catch (HTTP429Exception | DiscordException | MissingPermissionsException e) {
+                    } catch (DiscordException | MissingPermissionsException | RateLimitException e) {
                         e.printStackTrace();
                     }
                 }

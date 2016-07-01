@@ -3,10 +3,7 @@ package xyz.shekels.alice.cancerdiscordbot.command.commands;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.HTTP429Exception;
-import sx.blah.discord.util.MessageBuilder;
-import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.*;
 import xyz.shekels.alice.cancerdiscordbot.command.Command;
 import xyz.shekels.alice.cancerdiscordbot.command.CommandHandler;
 
@@ -24,11 +21,11 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public void execute(IMessage message) throws HTTP429Exception, DiscordException, MissingPermissionsException {
+    public void execute(IMessage message) throws DiscordException, MissingPermissionsException {
         CommandHandler.getCommands().forEach(command -> {
             try {
                 message.getChannel().sendMessage("$" + addEffect(command.getCommand(), BOLD) + ": " + command.getDescription());
-            } catch (MissingPermissionsException | HTTP429Exception | DiscordException e) {
+            } catch (MissingPermissionsException | DiscordException | RateLimitException e) {
                 e.printStackTrace();
             }
         });

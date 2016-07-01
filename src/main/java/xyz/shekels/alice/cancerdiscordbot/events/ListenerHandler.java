@@ -1,7 +1,7 @@
 package xyz.shekels.alice.cancerdiscordbot.events;
 
-import sx.blah.discord.api.EventDispatcher;
-import sx.blah.discord.api.IListener;
+import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.api.events.IListener;
 import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
 import xyz.shekels.alice.cancerdiscordbot.events.listeners.MessageRecievedListener;
 
