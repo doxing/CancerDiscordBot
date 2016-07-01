@@ -15,6 +15,7 @@ import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
 import xyz.shekels.alice.cancerdiscordbot.command.Command;
 
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
@@ -42,12 +43,14 @@ public class MusicCommand extends Command {
     public void execute(IMessage message) {
         String[] words = message.getContent().split(" ");
 
+        AudioPlayer audioPlayer = AudioPlayer.getAudioPlayerForGuild(message.getGuild());
+
         List<File> artists = Arrays.asList(musicDirectory.listFiles());
 
         artists.forEach(artist -> {
             albums.put(artist, Arrays.asList(artist.listFiles()));
         });
-        if (words.length == 2) {
+        if (words.length > 1) {
             if (words[1].equals("list")) {
                 final String[] musicList = {""};
                 albums.forEach((k, v) -> {
@@ -63,15 +66,24 @@ public class MusicCommand extends Command {
                     e.printStackTrace();
                 }
             } else if (words[1].equals("clear")) {
-                AudioPlayer audioPlayer = new AudioPlayer(Bot.getDiscordClient().getConnectedVoiceChannels().get(0).getGuild().getAudioManager());
                 audioPlayer.getPlaylist().clear();
+                Bot.getDiscordClient().getConnectedVoiceChannels().get(0).leave();
+            } else if (words[1].equals("queue")) {
+                audioPlayer.getPlaylist().forEach(song -> {
+                    try {
+                        message.getChannel().sendMessage(song.getMetadata().get("name").toString());
+                    } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
+                        e.printStackTrace();
+                    }
+                });
+
             } else {
                 words[0] = "";
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 0; i < words.length; i++) {
                     stringBuilder.append(words[i]);
                 }
-                String songname = stringBuilder.toString();
+                String songname = stringBuilder.toString().replaceAll("[^A-Za-z0-9]", "");
                 System.out.println(songname);
                 albums.forEach((k, v) -> {
                     v.forEach(album -> {
@@ -80,11 +92,11 @@ public class MusicCommand extends Command {
                                 try {
                                     if (file.exists()) {
                                         Mp3File song = new Mp3File(file);
-                                        if (!message.getAuthor().getConnectedVoiceChannels().isEmpty() & songname.replaceAll("[^A-Za-z0-9]", "").equalsIgnoreCase(song.getId3v2Tag().getTitle().replaceAll("[^A-Za-z0-9]", ""))) {
-                                            System.out.println(song.getId3v2Tag().getTitle());
+                                        if (!message.getAuthor().getConnectedVoiceChannels().isEmpty() & songname.equalsIgnoreCase(song.getId3v2Tag().getTitle().replaceAll("[^A-Za-z0-9]", ""))) {
                                             message.getAuthor().getConnectedVoiceChannels().get(0).join();
-                                            AudioPlayer audioPlayer = new AudioPlayer(Bot.getDiscordClient().getConnectedVoiceChannels().get(0).getGuild().getAudioManager());
-                                            audioPlayer.queue(file);
+                                            AudioPlayer.Track track = new AudioPlayer.Track(AudioSystem.getAudioInputStream(file));
+                                            track.getMetadata().put("name", song.getId3v2Tag().getTitle());
+                                            audioPlayer.queue(track);
                                         }
                                     }
                                 } catch (IOException | UnsupportedTagException | InvalidDataException | UnsupportedAudioFileException | MissingPermissionsException e) {
