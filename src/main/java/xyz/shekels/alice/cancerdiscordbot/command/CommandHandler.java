@@ -32,13 +32,11 @@ public class CommandHandler {
         if (message.getContent().startsWith("$")) {
             String[] finalMessage = message.getContent().replace("$", "").split(" ");
 
-            commands.forEach(command -> {
-                if (command.getCommand().equals(finalMessage[0])) {
-                    try {
-                        command.execute(message);
-                    } catch (DiscordException | MissingPermissionsException | RateLimitException e) {
-                        e.printStackTrace();
-                    }
+            commands.stream().filter(command -> command.getCommand().equals(finalMessage[0])).forEach(command -> {
+                try {
+                    command.execute(message);
+                } catch (RateLimitException | DiscordException | MissingPermissionsException e) {
+                    e.printStackTrace();
                 }
             });
         }
