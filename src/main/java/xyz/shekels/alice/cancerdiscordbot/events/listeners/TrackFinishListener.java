@@ -7,7 +7,8 @@ import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.audio.events.TrackFinishEvent;
 import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
-import xyz.shekels.alice.cancerdiscordbot.command.commands.MusicCommand;
+import xyz.shekels.alice.cancerdiscordbot.command.commands.PlayCommand;
+import xyz.shekels.alice.cancerdiscordbot.util.MusicUtil;
 
 import static sx.blah.discord.util.MessageBuilder.Styles.BOLD;
 import static xyz.shekels.alice.cancerdiscordbot.util.MessageUtil.addEffect;
@@ -23,12 +24,6 @@ public class TrackFinishListener implements IListener<TrackFinishEvent> {
         if (!audioStopEvent.getNewTrack().isPresent()) {
             Bot.getDiscordClient().getConnectedVoiceChannels().get(0).leave();
             Bot.getDiscordClient().changeStatus(Status.game("ded"));
-        } else if (audioStopEvent.getNewTrack().isPresent()) {
-            try {
-                MusicCommand.channel.sendMessage(addEffect("Now Playing: ", BOLD) + audioStopEvent.getNewTrack().get().getMetadata().get("artist") + ", " + audioStopEvent.getNewTrack().get().getMetadata().get("album") + ", " + audioStopEvent.getNewTrack().get().getMetadata().get("name"));
-            } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

@@ -5,9 +5,7 @@ import sx.blah.discord.api.events.IListener;
 import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
 import xyz.shekels.alice.cancerdiscordbot.events.listeners.MessageRecievedListener;
 import xyz.shekels.alice.cancerdiscordbot.events.listeners.TrackFinishListener;
-import xyz.shekels.alice.cancerdiscordbot.events.listeners.TrackStartListener;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,12 +20,12 @@ public class ListenerHandler {
      */
 
     private static EventDispatcher eventDispatcher = Bot.getDiscordClient().getDispatcher();
-    private static List<? extends IListener> listeners = Arrays.asList(new MessageRecievedListener(), new TrackFinishListener(), new TrackStartListener());
+    private static List<? extends IListener> listeners = Arrays.asList(new MessageRecievedListener(), new TrackFinishListener());
 
     public static void registerListeners() {
         listeners.forEach(listener -> {
             System.out.println("Registering " + listener.getClass().getSimpleName());
-            Bot.getDiscordClient().getDispatcher().registerListener(listener);
+            eventDispatcher.registerListener(listener);
         });
     }
 }
