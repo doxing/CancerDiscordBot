@@ -21,7 +21,7 @@ public class MessageUtil {
 
     @NotNull
     public static String filterText(String text) {
-        return text.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+        return text.replaceAll("[^A-Za-z0-9$]", "").toLowerCase();
     }
 
     public static void replyToMessage(IMessage replyTo, String response) {

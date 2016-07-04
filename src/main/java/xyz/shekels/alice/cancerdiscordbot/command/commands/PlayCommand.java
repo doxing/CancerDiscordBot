@@ -37,31 +37,25 @@ public class PlayCommand extends Command {
     }
 
     @Override
-    public void execute(IMessage message) throws MissingPermissionsException {
-        String[] words = message.getContent().split(" ");
+    public void execute(IMessage imessage) throws MissingPermissionsException {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            stringBuilder.append(words[i]);
-        }
+        final String message = imessage.getContent();
+        final String songName = message.substring(message.indexOf(" "), message.length());
 
-        String songName = stringBuilder.toString().replace("$play", "");
-
-        AudioPlayer audioPlayer = AudioPlayer.getAudioPlayerForGuild(message.getGuild());
-
-        if (words.length > 1) {
+        System.out.println("Play received track request: " + songName);
+        if (message.contains(" ") && songName.length() > 0) {
             List<File> songs = MusicUtil.fromFile(songName);
             if (!songs.isEmpty()) {
-                if (!message.getAuthor().getConnectedVoiceChannels().isEmpty() && Bot.getDiscordClient().getConnectedVoiceChannels().isEmpty()) {
+                if (!imessage.getAuthor().getConnectedVoiceChannels().isEmpty() && Bot.getDiscordClient().getConnectedVoiceChannels().isEmpty()) {
                     if (songs.size() == 1) {
-                        MusicUtil.playSong(message, songs.get(0));
+                        MusicUtil.playSong(imessage, songs.get(0));
                     } else {
                         if (songs.size() > 1) {
                             String[] buffer = {"Multiple matches found! Enter the number of the track you'd like to play.\n"};
-                            songs.stream().filter(File::exists).forEach(song -> buffer[0] += "**" + songs.indexOf(song) + ".** " + MusicUtil.getSongInfo(MusicUtil.getMp3(song)) + "\n");
+                            songs.stream().filter(File::exists).forEach(song -> buffer[0] += "**" + songs.indexOf(song) + ".** " + MusicUtil.getSongInfo(MusicUtil.getMp3(song)) + "\n");           songs.forEach(song -> System.out.println(song.getName()));
                             MusicUtil.setLimboSongs(songs);
                             try {
-                                message.getChannel().sendMessage(buffer[0]);
+                                imessage.getChannel().sendMessage(buffer[0]);
                             } catch (RateLimitException | DiscordException e) {
                                 e.printStackTrace();
                             }

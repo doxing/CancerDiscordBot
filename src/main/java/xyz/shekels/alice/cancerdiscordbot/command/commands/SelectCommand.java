@@ -21,23 +21,14 @@ public class SelectCommand extends Command {
     }
 
     @Override
-    public void execute(IMessage message) throws RateLimitException, DiscordException, MissingPermissionsException {
-        String[] words = message.getContent().split(" ");
+    public void execute(IMessage imessage) throws RateLimitException, DiscordException, MissingPermissionsException {
+        final String message = imessage.getContent();
+        final String number = message.substring(message.indexOf(" "), message.length());
 
-        System.out.println("???");
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            stringBuilder.append(words[i]);
-        }
-
-        String number = stringBuilder.toString().replace("$select", "");
-
-        System.out.println(number);
         if (Integer.parseInt(number) > MusicUtil.getLimboSongs().size() - 1) {
-            message.getChannel().sendMessage(MessageUtil.addEffect("Error: ", MessageBuilder.Styles.BOLD) + "Number " + number + "larger than amount of songs in limbo.");
+            imessage.getChannel().sendMessage(MessageUtil.addEffect("Error: ", MessageBuilder.Styles.BOLD) + "Number " + number + "larger than amount of songs in limbo.");
         } else {
-            MusicUtil.playSong(message, MusicUtil.getLimboSongs().get(Integer.parseInt(number)));
+            MusicUtil.playSong(imessage, MusicUtil.getLimboSongs().get(Integer.parseInt(number)));
             MusicUtil.getLimboSongs().clear();
         }
     }

@@ -4,7 +4,10 @@ import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.api.events.IListener;
 import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
 import xyz.shekels.alice.cancerdiscordbot.events.listeners.MessageRecievedListener;
+import xyz.shekels.alice.cancerdiscordbot.events.listeners.MusicListener;
 import xyz.shekels.alice.cancerdiscordbot.events.listeners.TrackFinishListener;
+import xyz.shekels.alice.cancerdiscordbot.events.listeners.TrackStartListener;
+import xyz.shekels.alice.cancerdiscordbot.util.MusicUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +23,7 @@ public class ListenerHandler {
      */
 
     private static EventDispatcher eventDispatcher = Bot.getDiscordClient().getDispatcher();
-    private static List<? extends IListener> listeners = Arrays.asList(new MessageRecievedListener(), new TrackFinishListener());
+    private static List<Object> listeners = Arrays.asList(new MessageRecievedListener(), new MusicListener());
 
     public static void registerListeners() {
         listeners.forEach(listener -> {

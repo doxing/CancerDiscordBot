@@ -19,10 +19,10 @@ public class QueueCommand extends Command {
 
     @Override
     public void execute(IMessage message) throws RateLimitException, DiscordException, MissingPermissionsException {
-        String[] buffer = {"Queue: "};
+        String[] buffer = {"Queue: \n"};
 
         MusicUtil.getQueue(message).forEach(song -> {
-            buffer[0] += MusicUtil.getQueue(message).indexOf(song) + ". " + MusicUtil.getSongInfo(song) + "\n";
+            buffer[0] += "**" + MusicUtil.getQueue(message).indexOf(song) + ".** " + MusicUtil.getSongInfo(song) + "\n";
         });
 
         message.getChannel().sendMessage(buffer[0]);

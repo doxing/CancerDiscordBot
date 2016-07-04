@@ -3,16 +3,25 @@ package xyz.shekels.alice.cancerdiscordbot.util;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.language.Soundex;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Status;
+import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.audio.AudioPlayer;
+import sx.blah.discord.util.audio.events.TrackFinishEvent;
+import sx.blah.discord.util.audio.events.TrackStartEvent;
 import xyz.shekels.alice.cancerdiscordbot.bot.Bot;
+import xyz.shekels.alice.cancerdiscordbot.command.commands.PlayCommand;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -24,6 +33,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static sx.blah.discord.util.MessageBuilder.Styles.BOLD;
+import static xyz.shekels.alice.cancerdiscordbot.util.MessageUtil.addEffect;
 
 /**
  * @author alice
@@ -66,6 +78,7 @@ public class MusicUtil {
                 track.getMetadata().put("album", getMp3Album(getMp3(song)));
                 track.getMetadata().put("name", getMp3Title(getMp3(song)));
                 audioPlayer.queue(track);
+                System.out.println("Playing: " + getSongInfo(track));
             } catch (IOException | UnsupportedAudioFileException e) {
                 e.printStackTrace();
             }
@@ -75,10 +88,12 @@ public class MusicUtil {
     public static void pauseSong(IMessage message) {
         AudioPlayer audioPlayer = AudioPlayer.getAudioPlayerForGuild(message.getGuild());
         audioPlayer.setPaused(!audioPlayer.isPaused());
+        System.out.println("Paused " + getSongInfo(audioPlayer.getCurrentTrack()));
     }
 
     public static void skipSong(IMessage message) {
         AudioPlayer audioPlayer = AudioPlayer.getAudioPlayerForGuild(message.getGuild());
+        System.out.println("Skipping: " + getSongInfo(audioPlayer.getCurrentTrack()));
         audioPlayer.skip();
     }
 
