@@ -1,6 +1,5 @@
 package xyz.shekels.alice.cancerdiscordbot.command.commands;
 
-import sun.java2d.pipe.SpanIterator;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MessageBuilder;
@@ -23,10 +22,10 @@ public class SelectCommand extends Command {
     @Override
     public void execute(IMessage imessage) throws RateLimitException, DiscordException, MissingPermissionsException {
         final String message = imessage.getContent();
-        final String number = message.substring(message.indexOf(" "), message.length());
+        final String number = message.substring(message.indexOf(" "), message.length()).trim();
 
         if (Integer.parseInt(number) > MusicUtil.getLimboSongs().size() - 1) {
-            imessage.getChannel().sendMessage(MessageUtil.addEffect("Error: ", MessageBuilder.Styles.BOLD) + "Number " + number + "larger than amount of songs in limbo.");
+            imessage.getChannel().sendMessage(MessageUtil.addEffect("Error: ", MessageBuilder.Styles.BOLD) + "Number " + number + " larger than amount of songs in limbo.");
         } else {
             MusicUtil.playSong(imessage, MusicUtil.getLimboSongs().get(Integer.parseInt(number)));
             MusicUtil.getLimboSongs().clear();

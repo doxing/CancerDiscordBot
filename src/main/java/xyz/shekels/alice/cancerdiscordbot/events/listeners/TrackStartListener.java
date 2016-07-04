@@ -15,15 +15,15 @@ import static xyz.shekels.alice.cancerdiscordbot.util.MessageUtil.addEffect;
 
 /**
  * @author alice
- * @since 7/3/16
+ * @since 7/4/16
  */
 public class TrackStartListener implements IListener<TrackStartEvent> {
 
     @Override
-    public void handle(TrackStartEvent trackStartEvent) {
+    public void handle(TrackStartEvent event) {
         try {
-            PlayCommand.channel.sendMessage(addEffect("Now Playing: ", BOLD) + MusicUtil.getSongInfo(trackStartEvent.getTrack()));
-            Bot.getDiscordClient().changeStatus(Status.game(MusicUtil.getSongInfo(trackStartEvent.getTrack())));
+            PlayCommand.channel.sendMessage(addEffect("Now Playing: ", BOLD) + MusicUtil.getSongInfo(event.getTrack()));
+            Bot.getDiscordClient().changeStatus(Status.game(MusicUtil.getSongInfo(event.getTrack())));
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
             e.printStackTrace();
         }

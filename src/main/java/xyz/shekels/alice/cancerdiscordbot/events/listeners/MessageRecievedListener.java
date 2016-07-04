@@ -1,4 +1,5 @@
 package xyz.shekels.alice.cancerdiscordbot.events.listeners;
+
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;

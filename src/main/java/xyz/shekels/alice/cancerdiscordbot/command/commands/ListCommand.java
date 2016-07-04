@@ -5,14 +5,11 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 import xyz.shekels.alice.cancerdiscordbot.command.Command;
-import xyz.shekels.alice.cancerdiscordbot.events.ListenerHandler;
 import xyz.shekels.alice.cancerdiscordbot.util.MessageUtil;
 import xyz.shekels.alice.cancerdiscordbot.util.MusicUtil;
 
 import java.io.File;
 import java.util.Arrays;
-
-import static sx.blah.discord.util.MessageBuilder.Styles.CODE;
 
 /**
  * @author alice
@@ -33,6 +30,6 @@ public class ListCommand extends Command {
                     Arrays.stream(artist.listFiles(File::isDirectory))
                             .forEach(album -> musicList[0] += "- " + album.getName() + "\n");
                 });
-        MessageUtil.replyToMessage(message, MessageUtil.addEffect(musicList[0], CODE));
+        MessageUtil.replyToMessageCode(message, musicList[0]);
     }
 }

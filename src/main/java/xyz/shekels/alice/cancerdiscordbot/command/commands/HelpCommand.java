@@ -1,12 +1,11 @@
 package xyz.shekels.alice.cancerdiscordbot.command.commands;
 
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.util.*;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RateLimitException;
 import xyz.shekels.alice.cancerdiscordbot.command.Command;
 import xyz.shekels.alice.cancerdiscordbot.command.CommandHandler;
-
-import static xyz.shekels.alice.cancerdiscordbot.util.MessageUtil.addEffect;
-import static sx.blah.discord.util.MessageBuilder.Styles.*;
 
 /**
  * @author alice
@@ -22,7 +21,7 @@ public class HelpCommand extends Command {
     public void execute(IMessage message) throws DiscordException, MissingPermissionsException, RateLimitException {
         String[] buffer = {""};
         CommandHandler.getCommands().forEach(command -> {
-                buffer[0] += "**$" + command.getCommand() + "**" + ": " + command.getDescription() + "\n";
+            buffer[0] += "**$" + command.getCommand() + "**" + ": " + command.getDescription() + "\n";
         });
         message.getChannel().sendMessage(buffer[0]);
     }

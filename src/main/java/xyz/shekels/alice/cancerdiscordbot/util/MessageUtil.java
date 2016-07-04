@@ -24,12 +24,27 @@ public class MessageUtil {
         return text.replaceAll("[^A-Za-z0-9$]", "").toLowerCase();
     }
 
-    public static void replyToMessage(IMessage replyTo, String response) {
+    public static void replyToMessage(IMessage replyTo, String... response) {
         try {
-            replyTo.getChannel().sendMessage(response);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < response.length; i++) {
+                if (i == 0) {
+                    sb.append("**" + response[0] + "**");
+                } else {
+                    sb.append(response[i]);
+                }
+            }
+            replyTo.getChannel().sendMessage(sb.toString());
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
             e.printStackTrace();
         }
     }
 
+    public static void replyToMessageCode(IMessage replyTo, String response) {
+        try {
+            replyTo.getChannel().sendMessage("```\n" + response + "\n```");
+        } catch (MissingPermissionsException | DiscordException | RateLimitException e1) {
+            e1.printStackTrace();
+        }
+    }
 }

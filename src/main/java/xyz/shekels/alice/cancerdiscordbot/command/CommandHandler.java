@@ -31,7 +31,7 @@ public class CommandHandler {
     public void parse(IMessage message) {
         if (message.getContent().startsWith("$")) {
             String[] finalMessage = message.getContent().replace("$", "").split(" ");
-
+            System.out.println("Command: \"" + message.getContent() + "\" received from user: " + message.getAuthor().getName());
             commands.stream().filter(command -> command.getCommand().equals(finalMessage[0])).forEach(command -> {
                 try {
                     command.execute(message);
