@@ -82,9 +82,15 @@ public class MusicUtil {
 
     public static void pauseSong(IMessage message) {
         AudioPlayer audioPlayer = AudioPlayer.getAudioPlayerForGuild(message.getGuild());
-        audioPlayer.setPaused(!audioPlayer.isPaused());
-        System.out.println("Paused " + getSongInfo(audioPlayer.getCurrentTrack()));
-        MessageUtil.replyToMessage(message, "Paused: ", getSongInfo(audioPlayer.getCurrentTrack()));
+        if (audioPlayer.isPaused()) {
+            audioPlayer.setPaused(false);
+            System.out.println("Unpaused " + getSongInfo(audioPlayer.getCurrentTrack()));
+            MessageUtil.replyToMessage(message, "Unpaused: ", getSongInfo(audioPlayer.getCurrentTrack()));
+        } else {
+            audioPlayer.setPaused(true);
+            System.out.println("Paused " + getSongInfo(audioPlayer.getCurrentTrack()));
+            MessageUtil.replyToMessage(message, "Paused: ", getSongInfo(audioPlayer.getCurrentTrack()));
+        }
     }
 
     public static void skipSong(IMessage message) {

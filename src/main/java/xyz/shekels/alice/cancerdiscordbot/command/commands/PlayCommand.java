@@ -28,8 +28,6 @@ public class PlayCommand extends Command {
     public void execute(IMessage imessage) throws MissingPermissionsException {
         final String message = imessage.getContent();
         final String songName = message.substring(message.indexOf(" "), message.length());
-
-        System.out.println("Play received track request: " + songName);
         if (message.contains(" ") && songName.length() > 0) {
             List<File> songs = MusicUtil.fromFile(songName);
             if (!songs.isEmpty()) {

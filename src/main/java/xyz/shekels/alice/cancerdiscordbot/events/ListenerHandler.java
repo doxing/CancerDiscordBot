@@ -25,8 +25,6 @@ public class ListenerHandler {
     private static List<? extends IListener> listeners = Arrays.asList(new MessageRecievedListener(), new ReadyListener(), new TrackStartListener(), new TrackFinishListener());
 
     public static void registerListeners() {
-        listeners.forEach(listener -> {
-            eventDispatcher.registerListener(listener);
-        });
+        listeners.forEach(eventDispatcher::registerListener);
     }
 }
