@@ -24,7 +24,7 @@ public class Bot {
 
     @Nullable
     private static IDiscordClient getClient(){
-        String[] token = {""};
+        String[] token = {":^)"};
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(Bot.class.getResourceAsStream("/token")));
             br.lines().forEach(line -> token[0] += line);
